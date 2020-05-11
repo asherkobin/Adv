@@ -1,8 +1,18 @@
-class Item():
-  def __init__(self, name, description, can_be_pickedup = True, used_for = None, show_description_on_pickup = False):
+class Item:
+  def __init__(self, name, description):
     self.name = name
     self.description = description
-    self.inspect_description = "Show Secret Hints" #TBD
-    self.can_be_pickedup = can_be_pickedup
-    self.used_for = used_for
-    self.show_description_on_pickup = show_description_on_pickup
+
+class InventoryItem(Item):
+  def __init__(self, name, description):
+    super().__init__(name, description)
+
+  def pickup(self, player):
+    player.add_item(self)
+
+  def drop(self, player):
+    player.remove_item(self)
+
+class RoomItem(Item): # maybe rename to RoomObject
+  def __init__(self, name, description):
+    super().__init__(name, description)

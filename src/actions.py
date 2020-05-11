@@ -1,8 +1,10 @@
-from item import Item
+from item_old import Item
 from room import Room
 from player import Player
+from item import InventoryItem, RoomItem
 from termcolor import colored, cprint
 import textwrap
+import time
 
 #
 # Items can be used on Targets
@@ -16,12 +18,12 @@ class Actions():
 
   def list_commands(self):
     cprint("""
-  Movement Commands: n (north), s (south), e (east), w (west), q (quit)
+  Movement Commands: n (north), s (south), e (east), w (west)
 
   Room Commands:
   - look (describe your current location)
-  - survey (survey your nearby location for objects of interest)
-  - search [area_of_interest] (look further at something nearby)
+  - search (search your nearby location for objects of interest)
+  - inspect [object_of_interest] (look further at something nearby)
 
   Item Commands:
   - pickup [item_name] (pickup an item that you have found)
@@ -30,13 +32,19 @@ class Actions():
 
   Inventory Commands:
   - loot (displays your inventory)
-  - inspect [item_name] (inspect an item)
-  - use [item_name] on [target] (use an item on an object)""")
+  - inspect [item_name] (inspect an item for a closer look)
+  - use [item_name] on [target] (use an item from your inventory on an object)
+  
+  Other Commands:
+  - q (quit)
+  - hint (show a hint that might help if you are stuck)""")
 
   def print_room_description(self, room):
-    cprint(f"\nYou are in the {room.name}\n", "green") 
+    cprint(f"\nYou are in the {room.name}\n", "green", attrs=["bold"]) 
     for line in textwrap.wrap(room.description, 80):
       cprint(line, "white")
+
+############# Player Movements #############
 
   def north(self):
     if self.player.room.n_to != None:
@@ -66,18 +74,52 @@ class Actions():
     else:
       cprint("\n** Blocked **", "red")
 
-  def survey(self):
-    num_items_and_targets = 0
-    cprint("\nYou survey the area and see...\n", "white")
-    for item in self.player.room.items:
+############# HINT #############
+
+  def hint(self):
+    hint = colored("HINT: ", "white")\
+    + "You can "\
+    + colored("inspect", "green", attrs=["bold", "underline"])\
+    + " sepcific areas of interest.  Also, you can "\
+    + colored("inspect", "green", attrs=["bold", "underline"])\
+    + " items\nin your inventory.  You may learn more about an item and discover possible clues."\
+    + "\nIf you feel stuck, use the " + colored("look", "green", attrs=["bold", "underline"]) + " command as the description may provide help."
+    
+    print()
+    print(hint)
+
+############# SEARCH #############
+
+  # TODO: Implement "easymode" that will highlight items and room features not shown 
+  def search(self):
+    num_items = 0
+    cprint("\nYou search the area and see...\n", "white")
+    for item in self.player.room.inventory_items:
+      time.sleep(0.5)
       print("- " + colored(item.name, "yellow"))
-      num_items_and_targets += 1
-    for target in self.player.room.targets:
-      if (target.include_in_survey == True):
-        print("- " + colored(target.name, "cyan"))
-        num_items_and_targets += 1
-    if num_items_and_targets == 0:
+      num_items += 1
+    # if easy_mode:
+    #  for item in self.player.room.room_items:
+    #    time.sleep(0.5)
+    #    print("- " + colored(item.name, "cyan"))
+    #    num_items += 1
+    if num_items == 0:
       cprint("Nothing of interest.", "magenta")
+
+############# INSPECT #############
+
+  def inspect(self, item_name):
+    if self.player.has_item(item_name):
+      cprint("\n" + self.player.get_item(item_name).description, "magenta")
+    elif self.player.room.has_room_item(item_name):
+      cprint("\n" + self.player.room.get_room_item(item_name).description, "magenta")
+    elif self.player.room.has_inventory_item(item_name):
+      cprint("\nYou must pickup the " + colored(item_name, "yellow") + " to examine it.")
+    else:
+      cprint("\nAnything of that description is unremarkable.")
+  
+  def examine(self):
+    cprint("\nNot Implemented!", "red")
 
   def open(self, target_name):
     found_target = None
@@ -96,74 +138,51 @@ class Actions():
   def look(self):
     self.print_room_description(self.player.room)
 
+############# PICKUP #############
+
   def pickup(self, item_name):
-    found_item = None
-    found_target = None
-    for item in self.player.room.items:
+    found_inventory_item = None
+    found_room_item = None
+    for item in self.player.room.inventory_items:
       if item.name == item_name:
-        found_item = item
+        found_inventory_item = item
         break
-    for target in self.player.room.targets:
-      if target.name == item_name:
-        found_target = item
+    for item in self.player.room.room_items:
+      if item.name == item_name:
+        found_room_item = item
         break
-    if (found_target is not None):
+    if found_room_item is not None:
       cprint("\nThe " + item_name + " is too heavy to pickup.")
-    elif (found_item is None):
+    elif found_inventory_item is None:
       cprint("\nThere is no " + item_name + " here.")
-    elif found_item.can_be_pickedup == False:
-      cprint("\nYou cannot pickup the " + colored(item_name, "yellow") + ".")
-    else:
-      cprint("\nYou picked up the " + colored(item_name, "yellow") + ".")
-      if found_item.show_description_on_pickup:
-        cprint("\n" + found_item.description, "magenta")
-      self.player.room.items.remove(item)
-      self.player.add_item(item)
+    elif found_inventory_item is not None:
+      cprint("\nYou added the " + colored(item_name, "yellow") + " to your loot bag.")
+      found_inventory_item.pickup(self.player)
+
+############# DROP #############
 
   def drop(self, item_name):
-    found_item = None
+    found_inventory_item = None
     for item in self.player.items:
       if item.name == item_name:
-        found_item = item
+        found_inventory_item = item
         break
-    if (found_item is None):
-      cprint("\nYou do not possess a \033[93m" + item_name)
+    if found_inventory_item is None:
+      cprint("\nYou do not possess a " + colored(item_name, "yellow"))
     else:
-      cprint("\nYou dropped the \033[93m" + item_name)
-      self.player.room.items.append(item)
-      self.player.remove_item(item)
+      cprint("\nYou dropped the " + colored(item_name, "yellow"))
+      found_inventory_item.drop(self.player)
+
+############# LOOT #############
 
   def show_inventory(self):
     cprint("\nIn your loot bag you have:\n")
-    if len(self.player.items) == 0:
-      cprint("Nothing", "red")
-    else:
-      cprint(f"You have ${self.player.get_cash_amount()}")
-      for item in self.player.items:
-        cprint("- \033[93m" + item.name)
-
-  def inspect(self, item_name):
-    found_item = None
+    cprint("- " + colored("$" + str(self.player.get_cash_amount()), "yellow"))
     for item in self.player.items:
-      if item.name == item_name:
-        found_item = item
-        break
-    if (found_item is None):
-      cprint("\nYou do not possess a \033[93m" + item_name)
-    else:
-      cprint("\n" + found_item.description, "magenta")
-
-  def search(self, target_name):
-    found_target = None
-    for target in self.player.room.targets:
-      if target.name == target_name:
-        found_target = target
-        break
-    if (found_target is None):
-      cprint("\nThere is no " + colored(target_name, "cyan") + " present.")
-    else:
-      found_target.search()
+      cprint("- " + colored(item.name, "yellow"))
   
+############# USE #############
+
   def use(self, item_name, function, target_name):
     found_item = None
     found_target = None

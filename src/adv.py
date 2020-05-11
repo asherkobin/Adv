@@ -1,4 +1,4 @@
-from item import Item
+from item_old import Item
 from room import Room
 from player import Player
 from termcolor import colored, cprint
@@ -8,7 +8,7 @@ from inspect import signature
 import roomsetup
 import textwrap
 
-player = Player("Gambler", rooms["outside"])
+player = Player("Adventurer", rooms["outside"])
 actions = Actions(player)
 
 # def move_to(dir, cur_loc):
@@ -26,37 +26,33 @@ options = {
   "e": actions.east,
   "w": actions.west,
   "?": actions.list_commands,
-  "survey": actions.survey,
   "look": actions.look,
   "pickup": actions.pickup,
   "drop": actions.drop,
   "loot": actions.show_inventory,
   "inspect": actions.inspect,
+  "examine": actions.examine,
   "use": actions.use,
   "open": actions.open,
-  "search": actions.search
+  "search": actions.search,
+  "hint": actions.hint
 }
 
 cash_needed_to_win = 10000
 
-cprint(f"\n Welcome {player.name}!  The story so far... ", "yellow", attrs=['reverse'])
+cprint(f"\n Welcome {player.name}!  This is story so far... ", "yellow", attrs=['reverse'])
+
+print()
 
 intro = """You have accumulated a sports gambling debt of $10,000.
  Your petulant bookie is looking for you to collect his money.
  You must find the money needed within 24 hours.
  You decide to explore an abandoned mine hoping to find anything of value to pay your debt."""
 
-hint = "\n" + colored("HINT: ", "white")\
-  + colored("When you pickup an item, you can learn more about it\n      (and discover possible clues) by ", "green")\
-  + colored("inspect", "green", attrs=["bold", "underline"])\
-  + colored("ing the item.", "green")\
-
-print()
-
 for line in textwrap.wrap(intro, 80):
   cprint(line, "cyan")
 
-cprint(hint)
+options["hint"]()
 
 cprint("\nType '?' to list player commands", "green")
 
