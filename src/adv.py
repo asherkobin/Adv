@@ -11,15 +11,6 @@ import textwrap
 player = Player("Adventurer", rooms["outside"])
 actions = Actions(player)
 
-# def move_to(dir, cur_loc):
-#   attribute = dir + "_to"
-
-#   if hasattr(cur_loc, attribute):
-#     return getattr(cur_loc, attribute)
-#   else:
-#     print("Can't Go That Way!")
-#     return cur_loc
-
 options = {
   "n": actions.north,
   "s": actions.south,

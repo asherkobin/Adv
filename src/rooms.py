@@ -2,26 +2,6 @@ from room import Room
 from items import items
 from termcolor import colored, cprint
 
-def padlock_use_success(player, item, target):
-  if (target.opened == True):
-    cprint("\nThe padlock has already been broken open.")
-  else:
-    target.opened = True
-    target.locked = False
-    cprint("\nThe brick destroys the rusty padlock and the entrance to the mine is opened.", "magenta")
-    rooms["outside"].description = "North of you, the mine entrance is opened."
-    rooms["outside"].n_to = rooms["mine-entrance"]
-
-def padlock_use_fail(player, item, target):
-  if (item.name == "steel-key"):
-    cprint("\nAs you turn the steel-key, it crumbles before you into a cloud of rust.", "white")
-    player.remove_item(item)
-  cprint("\nThe padlock remains locked.", "magenta")
-
-def padlock_open_action(player, target):
-  if (target.opened == True):
-    cprint("\nThe padlock is already opened.")
-
 def chest_unlocked(player, target):
   if (target.locked == False):
     cprint("\nThe chest is already unlocked.")
@@ -36,25 +16,6 @@ def chest_opened(player, target):
     target.opened = True
     cprint("\nYou find 100 twenty-dollar bills wrapped in a currency strap! $2000 is added to your loot bag.")
     player.add_cash(2000)
-
-# items = {
-#   "brick":
-#     Item("brick", "An ordinary red brick.  This may be useful to break things.", True, "brick_for_steel_gate"),
-#   "steel-key":
-#     Item("steel-key", "Engraved on they key is 'Mineshaft 23-C'. It looks like it hasn't been used in a while.", True, None, True),
-#   "gravel":
-#     Item("gravel", "The gravel shows flecks of what looks like gold.  Probably just pyrite.", True, None, True),
-#   "mystic_stone":
-#     Item("stone", "Mysterious rune carvings surround the stone.", True),
-#   "key_for_chest":
-#     Item("key", "An ordinary key for a ordinary lock.", True, "key_for_chest"),
-#   "padlock":
-#     Target("padlock", "brick_for_steel_gate", padlock_use_success, padlock_use_fail, padlock_open_action),
-#   "chest":
-#     Target("chest", "key_for_chest", chest_unlocked, None, chest_opened, True),
-#   "pool":
-#     Target("pool", None, None, None, None, True)
-# }
 
 rooms = {
   "outside":

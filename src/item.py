@@ -3,7 +3,7 @@ class Item:
     self.name = name
     self.description = description
 
-class InventoryItem(Item):
+class InventoryItem(Item): # Source
   def __init__(self, name, description):
     super().__init__(name, description)
 
@@ -13,6 +13,11 @@ class InventoryItem(Item):
   def drop(self, player):
     player.remove_item(self)
 
-class RoomItem(Item): # maybe rename to RoomObject
+  def use(self, target, player):
+    return False
+
+class RoomItem(Item): # Target
   def __init__(self, name, description):
     super().__init__(name, description)
+    self.locked = False
+    self.opened = False

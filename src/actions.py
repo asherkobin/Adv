@@ -95,14 +95,9 @@ class Actions():
     num_items = 0
     cprint("\nYou search the area and see...\n", "white")
     for item in self.player.room.inventory_items:
-      time.sleep(0.5)
+      time.sleep(0.25)
       print("- " + colored(item.name, "yellow"))
       num_items += 1
-    # if easy_mode:
-    #  for item in self.player.room.room_items:
-    #    time.sleep(0.5)
-    #    print("- " + colored(item.name, "cyan"))
-    #    num_items += 1
     if num_items == 0:
       cprint("Nothing of interest.", "magenta")
 
@@ -158,6 +153,7 @@ class Actions():
     elif found_inventory_item is not None:
       cprint("\nYou added the " + colored(item_name, "yellow") + " to your loot bag.")
       found_inventory_item.pickup(self.player)
+      self.player.room.inventory_items.remove(found_inventory_item)
 
 ############# DROP #############
 
@@ -172,6 +168,7 @@ class Actions():
     else:
       cprint("\nYou dropped the " + colored(item_name, "yellow"))
       found_inventory_item.drop(self.player)
+      self.player.room.inventory_items.append(found_inventory_item)
 
 ############# LOOT #############
 
@@ -183,25 +180,19 @@ class Actions():
   
 ############# USE #############
 
-  def use(self, item_name, function, target_name):
+  def use(self, inventory_item, function, room_item):
     found_item = None
     found_target = None
-    for item in self.player.items:
-      if item.name == item_name:
-        found_item = item
-        break
-    if (found_item is None):
-      cprint("\nYou do not possess a \033[93m" + item_name)
-    else:
-      for target in self.player.room.targets:
-        if target.name == target_name:
-          found_target = target
-          break
-      if (found_target is None):
-        cprint("\nThis room does not have a " + colored(target_name, "cyan"))
-      elif (found_target.item_used_for == found_item.used_for):
-        found_target.success_action(self.player, found_item, found_target)
-      elif (found_target.fail_action != None):
-        found_target.fail_action(self.player, found_item, found_target)
-      else:
-        cprint("\nNo Effect", "magenta")
+    
+    found_item = self.player.get_item(inventory_item)
+    if not found_item:
+      cprint("\nYou do not possess a " + colored(inventory_item, "yellow") + ".")
+      return
+
+    found_target = self.player.room.get_room_item(room_item)
+    if not found_target:
+      cprint("\nThis room does not have a " + colored(room_item, "cyan") + ".")
+      return
+
+    if not found_item.use(found_target, self.player):
+      cprint("\nNo effect...", "magenta")
