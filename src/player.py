@@ -1,13 +1,15 @@
-# Write a class to hold player information, e.g. what room they are in
-# currently.
-
 class Player():
-  """ Player """
-  def __init__(self, name, room):  # self not needed
-    self.name = name
-    self.room = room
+  def __init__(self):
+    self.name = None
+    self.room = None
     self.items = []
     self.cash = 0
+
+  def set_name(self, name):
+    self.name = name
+
+  def set_room(self, room):
+    self.room = room
   
   def add_item(self, item):
     self.items.append(item)

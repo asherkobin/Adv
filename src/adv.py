@@ -1,15 +1,21 @@
-from item_old import Item
-from room import Room
-from player import Player
+from state import State
+#from room import Room
 from termcolor import colored, cprint
 from actions import Actions
-from rooms import rooms
+#from rooms import rooms
 from inspect import signature
-import roomsetup
+#import roomsetup
 import textwrap
+from items import init_items
+from rooms import init_rooms, init_room_connections
 
-player = Player("Adventurer", rooms["outside"])
-actions = Actions(player)
+state = State()
+
+init_items(state)
+init_rooms(state)
+init_room_connections(state)
+
+actions = Actions(state)
 
 options = {
   "n": actions.north,
@@ -31,7 +37,9 @@ options = {
 
 cash_needed_to_win = 10000
 
-cprint(f"\n Welcome {player.name}!  This is story so far... ", "yellow", attrs=['reverse'])
+state.player.set_room(state.rooms.get_room("outside"))
+
+cprint(f"\n Welcome {state.player.name}!  This is story so far... ", "yellow", attrs=['reverse'])
 
 print()
 
@@ -47,7 +55,7 @@ options["hint"]()
 
 cprint("\nType '?' to list player commands", "green")
 
-actions.print_room_description(player.room)
+actions.print_room_description(state.player.room)
 
 while (True):
   user_action = input("\nAction: ")
