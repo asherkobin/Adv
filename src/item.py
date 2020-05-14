@@ -4,17 +4,21 @@ class Item:
     self.description = description
 
 class InventoryItem(Item): # Source
-  def __init__(self, name, description):
+  def __init__(self, name, description, hidden = False):
     super().__init__(name, description)
+    self.hidden = hidden
 
-  def pickup(self, player):
-    player.add_item(self)
+  def pickup(self, state):
+    state.player.add_item(self)
 
-  def drop(self, player):
-    player.remove_item(self)
+  def drop(self, state):
+    state.player.remove_item(self)
 
-  def use(self, target, player):
+  def use(self, target, state):
     return False
+
+  def is_hidden(self):
+    return self.is_hidden
 
 class RoomItem(Item): # Target
   def __init__(self, name, description):

@@ -22,17 +22,17 @@ class Actions():
   Room Commands:
   - look (describe your current location)
   - search (search your nearby location for objects of interest)
-  - inspect [object_of_interest] (look further at something nearby)
+  - inspect [area_of_interest] (look further at something nearby)
 
   Item Commands:
   - pickup [item_name] (pickup an item that you have found)
-  - drop [item_name] (drop an item from your inventory)
   - open [item_name] (opens an object)
 
   Inventory Commands:
   - loot (displays your inventory)
   - inspect [item_name] (inspect an item for a closer look)
   - use [item_name] on [target] (use an item from your inventory on an object)
+  - drop [item_name] (drop an item from your inventory)
   
   Other Commands:
   - q (quit)
@@ -68,7 +68,7 @@ class Actions():
 
   def west(self):
     if self.state.player.room.can_go_west():
-      self.state.player.room = self.state.player.west_room
+      self.state.player.room = self.state.player.room.west_room
       self.print_room_description(self.state.player.room)
     else:
       cprint("\n** Blocked **", "red")
@@ -93,9 +93,10 @@ class Actions():
     num_items = 0
     cprint("\nYou search the area and see...\n", "white")
     for item in self.state.player.room.inventory_items:
-      time.sleep(0.25)
-      print("- " + colored(item.name, "yellow"))
-      num_items += 1
+      if item.is_hidden() is False:
+        time.sleep(0.25)
+        print("- " + colored(item.name, "yellow"))
+        num_items += 1
     if num_items == 0:
       cprint("Nothing of interest.", "magenta")
 
@@ -111,7 +112,7 @@ class Actions():
     else:
       cprint("\nAnything of that description is unremarkable.")
 
-############# OPEN #############
+############# EXAMINE #############
 
   def examine(self):
     cprint("\nNot Implemented!", "red")
@@ -154,7 +155,7 @@ class Actions():
       cprint("\nThere is no " + item_name + " here.")
     elif found_inventory_item is not None:
       cprint("\nYou added the " + colored(item_name, "yellow") + " to your loot bag.")
-      found_inventory_item.pickup(self.state.player)
+      found_inventory_item.pickup(self.state)
       self.state.player.room.inventory_items.remove(found_inventory_item)
 
 ############# DROP #############
@@ -169,7 +170,7 @@ class Actions():
       cprint("\nYou do not possess a " + colored(item_name, "yellow"))
     else:
       cprint("\nYou dropped the " + colored(item_name, "yellow"))
-      found_inventory_item.drop(self.state.player)
+      found_inventory_item.drop(self.state)
       self.state.player.room.inventory_items.append(found_inventory_item)
 
 ############# LOOT #############
@@ -196,5 +197,5 @@ class Actions():
       cprint("\nThis room does not have a " + colored(room_item, "cyan") + ".")
       return
 
-    if not found_item.use(found_target, self.state.player):
+    if not found_item.use(found_target, self.state):
       cprint("\nNo effect...", "magenta")

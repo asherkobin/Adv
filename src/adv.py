@@ -1,10 +1,7 @@
 from state import State
-#from room import Room
 from termcolor import colored, cprint
 from actions import Actions
-#from rooms import rooms
 from inspect import signature
-#import roomsetup
 import textwrap
 from items import init_items
 from rooms import init_rooms, init_room_connections
@@ -73,7 +70,7 @@ while (True):
     function = decontructed_command[2]
     target = decontructed_command[3]
   else:
-    action = decontructed_command[0]      # eg: survey
+    action = decontructed_command[0]      # eg: search
     subject = None
 
   if (action == "q"):
