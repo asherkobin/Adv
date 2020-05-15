@@ -1,0 +1,4 @@
+alter inspect text after something has changed:
+- padlock
+- pool
+open padlock fails

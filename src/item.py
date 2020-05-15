@@ -17,11 +17,15 @@ class InventoryItem(Item): # Source
   def use(self, target, state):
     return False
 
-  def is_hidden(self):
-    return self.is_hidden
-
 class RoomItem(Item): # Target
-  def __init__(self, name, description):
+  def __init__(self, name, description, locked = False):
     super().__init__(name, description)
-    self.locked = False
+    self.locked = locked
     self.opened = False
+    self.looted = False
+
+  def can_open(self, state):
+    return False
+
+  def open(self, state):
+    self.opened = True

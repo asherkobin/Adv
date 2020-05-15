@@ -41,9 +41,9 @@ cprint(f"\n Welcome {state.player.name}!  This is story so far... ", "yellow", a
 print()
 
 intro = """You have accumulated a sports gambling debt of $10,000.
- Your petulant bookie is looking for you to collect his money.
- You must find the money needed within 24 hours.
- You decide to explore an abandoned mine hoping to find anything of value to pay your debt."""
+Your petulant bookie is looking for you to collect his money.
+You must find the money needed within 24 hours.
+You decide to explore an abandoned mine hoping to find anything of value to pay your debt."""
 
 for line in textwrap.wrap(intro, 80):
   cprint(line, "cyan")

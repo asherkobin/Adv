@@ -93,7 +93,7 @@ class Actions():
     num_items = 0
     cprint("\nYou search the area and see...\n", "white")
     for item in self.state.player.room.inventory_items:
-      if item.is_hidden() is False:
+      if item.hidden is False:
         time.sleep(0.25)
         print("- " + colored(item.name, "yellow"))
         num_items += 1
@@ -121,17 +121,17 @@ class Actions():
 
   def open(self, target_name):
     found_target = None
-    for target in self.state.player.room.targets:
+    for target in self.state.player.room.room_items:
       if target.name == target_name:
         found_target = target
         break
     if found_target == None:
       cprint("\nNo such target.")
     else:
-      if (found_target.locked == False):
-        found_target.open_action(self.state.player, found_target)
-      else:
+      if found_target.locked == True:
         cprint("\nThe " + found_target.name + " is locked.", "red")
+      else:
+        found_target.open(self.state)
 
   def look(self):
     self.print_room_description(self.state.player.room)

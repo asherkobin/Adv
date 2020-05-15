@@ -34,7 +34,7 @@ class Padlock(RoomItem):
 
 class SteelKey(InventoryItem):
   def __init__(self):
-    super().__init__("steel-key", "Engraved on they key is 'Mineshaft 23-C'. It looks like it hasn't been used in a while.")
+    super().__init__("steel-key", "Engraved on they key is '23-C'. It looks like it hasn't been used in a while.")
   def use(self, target, state):
     if target is state.items.get_item("padlock"):
       if target.opened == True:
@@ -43,6 +43,13 @@ class SteelKey(InventoryItem):
         cprint("\nAs you turn the steel-key, it crumbles before you into a cloud of rust.", "white")
         cprint("\nThe padlock remains locked.", "magenta")
         state.player.remove_item(self)
+      return True
+    if target is state.items.get_item("equipment-locker"):
+      if target.opened == True:
+        cprint("\nThe locker is already unlocked.")
+      else:
+        target.locked = False
+        cprint("\nYou unlock the locker with the steel-key", "white")
       return True
     else:
       return False
@@ -66,6 +73,30 @@ class MysticStone(InventoryItem):
 class DarkGlassPool(RoomItem):
   def __init__(self):
     super().__init__("pool", "Beyond the dark surface, you see several rocks settled on the floor of the pool.  You scatter the rocks and see a peculiar-stone, distinct from the others.")
+
+class RockPick(InventoryItem):
+  def __init__(self):
+    super().__init__("pick", "A tool used for breaking rock.")
+
+class Shovel(InventoryItem):
+  def __init__(self):
+    super().__init__("shovel", "A tool used for digging.")
+
+class EquipmentLocker(RoomItem):
+  def __init__(self):
+    super().__init__("locker", "There is a keyhole with a nameplate that reads '23-C'.", True)
+  def can_open(self, state):
+    return True
+  def open(self, state):
+    if self.locked:
+      cprint("\nYou cannot open it. Is there a keyhole?")
+    elif self.looted:
+      cprint("\nThe locker is empty.")
+    else:
+      super().open(state)
+      cprint("\nYou find a bag containing $1000!", "yellow")
+      state.player.add_cash(1000)
+      self.looted = True
 
 # def chest_unlocked(player, target):
 #   if (target.locked == False):

@@ -20,6 +20,24 @@ def init_rooms(state):
     ))
 
   state.rooms.add_room(
+    "east-passageway",
+    Room(
+      "East Passageway",
+      "The hard-packed earthen floor has been heavily traveled by miners. It must lead to somewhere interesting.",
+      [],
+      []
+    ))
+  
+  state.rooms.add_room(
+    "equipment-room",
+    Room(
+      "Equipment Room",
+      "The room is looks like it was used by the miners to prepare for work. You see shovels and picks scattered around. On the south wall, there are a row of busted open lockers but one locker is undamaged.",
+      [state.items.get_item("rock-pick"), state.items.get_item("shovel")],
+      [state.items.get_item("equipment-locker")]
+    ))
+
+  state.rooms.add_room(
     "cool-room",
     Room(
       "Open Area west of the Mine Entrance",
@@ -47,27 +65,15 @@ def init_rooms(state):
     ))
 
 def init_room_connections(state):
+  state.rooms.get_room("outside").north_room = state.rooms.get_room("mine-entrance") #TEMP
   state.rooms.get_room("mine-entrance").south_room = state.rooms.get_room("outside")
   state.rooms.get_room("mine-entrance").west_room = state.rooms.get_room("cool-room")
+  state.rooms.get_room("mine-entrance").east_room = state.rooms.get_room("east-passageway")
   state.rooms.get_room("cool-room").east_room = state.rooms.get_room("mine-entrance")
   state.rooms.get_room("cool-room").west_room = state.rooms.get_room("narrow-corridor")
   state.rooms.get_room("narrow-corridor").east_room = state.rooms.get_room("cool-room")
   state.rooms.get_room("narrow-corridor").west_room = state.rooms.get_room("barrel-shaped-room")
   state.rooms.get_room("barrel-shaped-room").east_room = state.rooms.get_room("narrow-corridor")
-
-
-
-# rooms['mine-entrance'].e_to = rooms['cool-room']
-# rooms['mine-entrance'].w_to = None
-# rooms['cool-room'].n_to = None
-# rooms['cool-room'].s_to = None
-# rooms['cool-room'].e_to = rooms['narrow-corridor']
-# rooms['cool-room'].w_to = rooms['mine-entrance']
-# rooms['narrow-corridor'].n_to = None
-# rooms['narrow-corridor'].s_to = None
-# rooms['narrow-corridor'].e_to = rooms['barrel-shaped-room']
-# rooms['narrow-corridor'].w_to = rooms['cool-room']
-# rooms['barrel-shaped-room'].n_to = None
-# rooms['barrel-shaped-room'].s_to = None
-# rooms['barrel-shaped-room'].e_to = None
-# rooms['barrel-shaped-room'].w_to = rooms['narrow-corridor']
+  state.rooms.get_room("east-passageway").west_room = state.rooms.get_room("mine-entrance")
+  state.rooms.get_room("east-passageway").east_room = state.rooms.get_room("equipment-room")
+  state.rooms.get_room("equipment-room").west_room = state.rooms.get_room("east-passageway")
