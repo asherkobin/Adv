@@ -25,7 +25,7 @@ class Actions():
   - inspect [area_of_interest] (look further at something nearby)
 
   Item Commands:
-  - pickup [item_name] (pickup an item that you have found)
+  - take [item_name] (take an item that you have found)
   - open [item_name] (opens an object)
 
   Inventory Commands:
@@ -104,11 +104,17 @@ class Actions():
 
   def inspect(self, item_name):
     if self.state.player.has_item(item_name):
-      cprint("\n" + self.state.player.get_item(item_name).description, "magenta")
+      msg = self.state.player.get_item(item_name).description
+      print()
+      for line in textwrap.wrap(msg, 80):
+        cprint(line, "magenta")
     elif self.state.player.room.has_room_item(item_name):
-      cprint("\n" + self.state.player.room.get_room_item(item_name).description, "magenta")
+      print()
+      msg = self.state.player.room.get_room_item(item_name).description
+      for line in textwrap.wrap(msg, 80):
+        cprint(line, "magenta")
     elif self.state.player.room.has_inventory_item(item_name):
-      cprint("\nYou must pickup the " + colored(item_name, "yellow") + " to examine it.")
+      cprint("\nYou must take the " + colored(item_name, "yellow") + " to examine it.")
     else:
       cprint("\nAnything of that description is unremarkable.")
 
@@ -136,9 +142,9 @@ class Actions():
   def look(self):
     self.print_room_description(self.state.player.room)
 
-############# PICKUP #############
+############# TAKE #############
 
-  def pickup(self, item_name):
+  def take(self, item_name):
     found_inventory_item = None
     found_room_item = None
     for item in self.state.player.room.inventory_items:
@@ -150,13 +156,17 @@ class Actions():
         found_room_item = item
         break
     if found_room_item is not None:
-      cprint("\nThe " + item_name + " is too heavy to pickup.")
+      cprint("\nWhy would you want to do that?")
     elif found_inventory_item is None:
       cprint("\nThere is no " + item_name + " here.")
     elif found_inventory_item is not None:
       cprint("\nYou added the " + colored(item_name, "yellow") + " to your loot bag.")
-      found_inventory_item.pickup(self.state)
-      self.state.player.room.inventory_items.remove(found_inventory_item)
+      found_inventory_item.take(self.state)
+      if found_inventory_item.hidden:
+        found_inventory_item.hidden = False
+      else:
+        self.state.player.room.inventory_items.remove(found_inventory_item)
+
 
 ############# DROP #############
 

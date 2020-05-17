@@ -12,6 +12,20 @@ init_items(state)
 init_rooms(state)
 init_room_connections(state)
 
+import sys
+from item import RoomItem
+unlock_all_items = False
+start_flag = None
+if len(sys.argv) > 1:
+  start_flag = sys.argv[1]
+if start_flag == "-u":
+  unlock_all_items = True
+if unlock_all_items:
+  for item in state.items:
+    if isinstance(item, RoomItem) and item.locked:
+      item.locked = False
+      state.rooms.get_room("outside").north_room = state.rooms.get_room("mine-entrance")
+
 actions = Actions(state)
 
 options = {
@@ -21,7 +35,7 @@ options = {
   "w": actions.west,
   "?": actions.list_commands,
   "look": actions.look,
-  "pickup": actions.pickup,
+  "take": actions.take,
   "drop": actions.drop,
   "loot": actions.show_inventory,
   "inspect": actions.inspect,
@@ -54,12 +68,15 @@ cprint("\nType '?' to list player commands", "green")
 
 actions.print_room_description(state.player.room)
 
+if unlock_all_items:
+  cprint("\nEVERYTHING IS UNLOCKED", "red")
+
 while (True):
   user_action = input("\nAction: ")
 
   decontructed_command = user_action.split(" ")
 
-  if (len(decontructed_command) == 2):    # eg: pickup key, search pond
+  if (len(decontructed_command) == 2):    # eg: take key, search pond
     action = decontructed_command[0]
     subject = decontructed_command[1]
     function = None

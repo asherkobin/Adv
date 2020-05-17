@@ -1,4 +1,15 @@
-alter inspect text after something has changed:
-- padlock
-- pool
-open padlock fails
+https://classroomaid.files.wordpress.com/2013/01/if-for-beginners-by-plotkin-and-albaugh-2010.png
+
+bugs:
+X alter inspect text after something has changed: padlock pool
+X textwrap inspect text
+
+features:
+X unlock flag
+- print room
+- tab complete (can it be done?)
+   ^
+ +---+
+<|   |>
+ +---+
+ - custom "blocked" message

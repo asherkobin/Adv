@@ -8,7 +8,7 @@ class InventoryItem(Item): # Source
     super().__init__(name, description)
     self.hidden = hidden
 
-  def pickup(self, state):
+  def take(self, state):
     state.player.add_item(self)
 
   def drop(self, state):

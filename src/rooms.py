@@ -61,11 +61,11 @@ def init_rooms(state):
       "Barrel-Shaped Room",
       "The corridor ends into a cold empty area. The ceiling is covered in moisture, the walls converging into a circle. You have found the source of the dripping sound: a small pool being filled from codensation.",
       [state.items.get_item("peculiar-stone")],
-      [state.items.get_item("dark-glass-pool")]
+      [state.items.get_item("dark-pool")]
     ))
 
 def init_room_connections(state):
-  state.rooms.get_room("outside").north_room = state.rooms.get_room("mine-entrance") #TEMP
+  state.rooms.get_room("outside").north_room = None # state.rooms.get_room("mine-entrance")
   state.rooms.get_room("mine-entrance").south_room = state.rooms.get_room("outside")
   state.rooms.get_room("mine-entrance").west_room = state.rooms.get_room("cool-room")
   state.rooms.get_room("mine-entrance").east_room = state.rooms.get_room("east-passageway")

@@ -5,6 +5,9 @@ class ItemList():
   def __init__(self):
     self.items = dict()
 
+  def __iter__(self):
+    return iter(self.items.values())
+
   def add_item(self, name, item):
     self.items[name] = item
 
@@ -24,13 +27,14 @@ class Brick(InventoryItem):
         cprint("\nThe brick destroys the rusty padlock and you remove the steel grid.  The entrance to the mine is opened!", "white")
         state.rooms.get_room("outside").north_room = state.rooms.get_room("mine-entrance")
         state.rooms.get_room("outside").description = "North of you, the mine entrance is opened."
+        target.description = "Only a pile of rust remains."
       return True
     else:
       return False
 
 class Padlock(RoomItem):
   def __init__(self):
-    super().__init__("padlock", "A 'Master' brand lock. On its face, 'Mineshaft 23-C' is written on a piece of tape.")
+    super().__init__("padlock", "A 'Master' brand lock. On its face, 'Mineshaft 23-C' is written on a piece of tape.", True)
 
 class SteelKey(InventoryItem):
   def __init__(self):
@@ -69,8 +73,11 @@ class EntranceChest(RoomItem):
 class MysticStone(InventoryItem):
   def __init__(self):
     super().__init__("peculiar-stone", "Mysterious rune carvings surround the stone.", True)
+  def take(self, state):
+    super().take(state)
+    state.items.get_item("dark--pool").description = "Beyond the dark surface, you see several rocks settled on the floor of the pool."
 
-class DarkGlassPool(RoomItem):
+class DarkPool(RoomItem):
   def __init__(self):
     super().__init__("pool", "Beyond the dark surface, you see several rocks settled on the floor of the pool.  You scatter the rocks and see a peculiar-stone, distinct from the others.")
 
