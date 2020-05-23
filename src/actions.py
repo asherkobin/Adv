@@ -38,10 +38,34 @@ class Actions():
   - q (quit)
   - hint (show a hint that might help if you are stuck)""")
 
+############# Helper Methods #############
+
   def print_room_description(self, room):
-    cprint(f"\nYou are in the {room.name}\n", "green", attrs=["bold"]) 
-    for line in textwrap.wrap(room.description, 80):
-      cprint(line, "white")
+    if room.name == "Mine Tunnel":
+      room_dirs = room.get_dirs()
+      if len(room_dirs) == 0:
+        cprint("\nYou have no where to go!", "red")
+      elif len(room_dirs) == 1:
+        cprint(f"\nYou are at a dead end of the mine tunnel. You can move {room_dirs[0]}.", "white")
+      elif len(room_dirs) == 2:
+        cprint(f"\nYou are in a mine tunnel. You can move {room_dirs[0]} or {room_dirs[1]}.", "white")
+      else:
+        tmp_str = ""
+        for i in range(len(room_dirs) - 1):
+          tmp_str += room_dirs[i] + ", "
+        tmp_str += f"or {room_dirs[len(room_dirs) - 1]}"
+        cprint(f"\nYou are in a mine tunnel. You can walk {tmp_str}.", "white")
+    else:
+      cprint(f"\nYou are in the {room.name}\n", "green", attrs=["bold"]) 
+      for line in textwrap.wrap(room.description, 80):
+        cprint(line, "white")
+
+  def print_room_directions(self, room):
+    room_dirs = room.get_dirs()
+    if len(room_dirs) == 0:
+      cprint("\nYou have no where to go!", "red")
+    else:
+      cprint("\nYou can walk: " + ", ".join(room_dirs), "white")
 
 ############# Player Movements #############
 
@@ -120,8 +144,11 @@ class Actions():
 
 ############# EXAMINE #############
 
-  def examine(self):
-    cprint("\nNot Implemented!", "red")
+  def examine(self, target):
+    if target == "room":
+      self.print_room_directions(self.state.player.room)
+    else:
+      cprint("Examine what?", "white")
   
 ############# OPEN #############
 
@@ -139,6 +166,8 @@ class Actions():
       else:
         found_target.open(self.state)
 
+############# LOOK #############
+  
   def look(self):
     self.print_room_description(self.state.player.room)
 

@@ -21,6 +21,18 @@ class Room():
   def can_go_west(self):
     return self.west_room is not None
 
+  def get_dirs(self):
+    dirs = []
+    if self.can_go_north():
+      dirs.append("north")
+    if self.can_go_south():
+      dirs.append("south")
+    if self.can_go_east():
+      dirs.append("east")
+    if self.can_go_west():
+      dirs.append("west")
+    return dirs
+
   def has_inventory_item(self, item_name):
     found_item = False
     for item in self.inventory_items:

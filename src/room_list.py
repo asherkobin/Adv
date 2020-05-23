@@ -1,3 +1,7 @@
+from room import Room
+import uuid
+
+
 class RoomList():
   def __init__(self):
     self.rooms = dict()
@@ -10,3 +14,8 @@ class RoomList():
       return self.rooms[name]
     else:
       return None
+
+  def create_mine_tunnel(self):
+    mine_tunnel = Room("Mine Tunnel", "")
+    self.add_room(str(uuid.uuid4()), mine_tunnel)
+    return mine_tunnel

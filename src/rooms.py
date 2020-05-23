@@ -32,7 +32,7 @@ def init_rooms(state):
     "equipment-room",
     Room(
       "Equipment Room",
-      "The room is looks like it was used by the miners to prepare for work. You see shovels and picks scattered around. On the south wall, there are a row of busted open lockers but one locker is undamaged.",
+      "The room is looks like it was used by the miners to prepare for work. You see shovels and picks scattered around. On the south wall, there are a row of heavily damaged lockers but one locker is undamaged.",
       [state.items.get_item("rock-pick"), state.items.get_item("shovel")],
       [state.items.get_item("equipment-locker")]
     ))
@@ -64,7 +64,21 @@ def init_rooms(state):
       [state.items.get_item("dark-pool")]
     ))
 
+class RoomLinker:
+  def __init__(self, state):
+    self.state = state
+  def to_north(self, src, dst):
+    self.state.rooms.get_room(src).north_room = self.state.rooms.get_room(dst)
+  def to_south(self, src, dst):
+    self.state.rooms.get_room(src).south_room = self.state.rooms.get_room(dst)
+  def to_east(self, src, dst):
+    self.state.rooms.get_room(src).east_room = self.state.rooms.get_room(dst)
+  def to_west(self, src, dst):
+    self.state.rooms.get_room(src).west_room = self.state.rooms.get_room(dst)
+
 def init_room_connections(state):
+  # rl = RoomLinker(state)
+  # rl.to_north("outside", None)
   state.rooms.get_room("outside").north_room = None # state.rooms.get_room("mine-entrance")
   state.rooms.get_room("mine-entrance").south_room = state.rooms.get_room("outside")
   state.rooms.get_room("mine-entrance").west_room = state.rooms.get_room("cool-room")
@@ -77,3 +91,10 @@ def init_room_connections(state):
   state.rooms.get_room("east-passageway").west_room = state.rooms.get_room("mine-entrance")
   state.rooms.get_room("east-passageway").east_room = state.rooms.get_room("equipment-room")
   state.rooms.get_room("equipment-room").west_room = state.rooms.get_room("east-passageway")
+
+  state.rooms.get_room("mine-entrance").north_room = state.rooms.create_mine_tunnel()
+  state.rooms.get_room("mine-entrance").north_room.north_room = state.rooms.create_mine_tunnel()
+  state.rooms.get_room("mine-entrance").north_room.south_room = state.rooms.get_room("mine-entrance")
+  state.rooms.get_room("mine-entrance").north_room.east_room = state.rooms.create_mine_tunnel()
+  state.rooms.get_room("mine-entrance").north_room.west_room = state.rooms.create_mine_tunnel()
+  

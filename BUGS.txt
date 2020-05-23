@@ -5,11 +5,23 @@ X alter inspect text after something has changed: padlock pool
 X textwrap inspect text
 
 features:
-X unlock flag
-- print room
-- tab complete (can it be done?)
-   ^
- +---+
-<|   |>
- +---+
+DONE: unlock flag
+NO: print room
+NO: tab complete (can it be done?)
  - custom "blocked" message
+ - create generic room
+
+
+ look north
+ look south etc
+
+# Pump Station
+# Natural Cave
+# Ventilation Shaft
+# Water Basin
+# Tailings
+# Drainage Tunnel
+# use Pan in pool
+# wood slats on floor or ceiling
+# cart
+# train tracks

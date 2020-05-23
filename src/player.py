@@ -1,6 +1,6 @@
 class Player():
-  def __init__(self):
-    self.name = None
+  def __init__(self, name = "Player"):
+    self.name = name
     self.room = None
     self.items = []
     self.cash = 0
