@@ -122,7 +122,7 @@ class Actions():
         print("- " + colored(item.name, "yellow"))
         num_items += 1
     if num_items == 0:
-      cprint("Nothing of interest.", "magenta")
+      cprint("Nothing of interest.", "white")
 
 ############# INSPECT #############
 
@@ -140,7 +140,7 @@ class Actions():
     elif self.state.player.room.has_inventory_item(item_name):
       cprint("\nYou must take the " + colored(item_name, "yellow") + " to examine it.")
     else:
-      cprint("\nAnything of that description is unremarkable.")
+      cprint("\nAnything of that description is unremarkable.", "white")
 
 ############# EXAMINE #############
 
@@ -238,3 +238,10 @@ class Actions():
 
     if not found_item.use(found_target, self.state):
       cprint("\nNo effect...", "magenta")
+
+############# DEBUG #############
+
+  def debug(self):
+    print()
+    for uid in self.state.game_map.get_all_room_uids():
+      cprint(f"- {uid}", "blue")

@@ -11,6 +11,7 @@ class Room():
     self.map_row = -1
     self.map_col = -1
     self.uid = None
+    self.is_tunnel = False
 
   def can_go_north(self):
     return self.north_room is not None

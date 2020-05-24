@@ -4,13 +4,14 @@ from actions import Actions
 from inspect import signature
 import textwrap
 from items import init_items
-from rooms import init_rooms, init_room_connections
+from rooms import init_rooms
+from game_map import init_map
 
 state = State()
 
 init_items(state)
 init_rooms(state)
-init_room_connections(state)
+init_map(state)
 
 import sys
 from item import RoomItem
@@ -24,7 +25,7 @@ if unlock_all_items:
   for item in state.items:
     if isinstance(item, RoomItem) and item.locked:
       item.locked = False
-      state.rooms.get_room("outside").north_room = state.rooms.get_room("mine-entrance")
+  state.rooms.get_room("outside").north_room = state.rooms.get_room("mine-entrance")
 
 actions = Actions(state)
 
@@ -43,12 +44,13 @@ options = {
   "use": actions.use,
   "open": actions.open,
   "search": actions.search,
-  "hint": actions.hint
+  "hint": actions.hint,
+  "debug": actions.debug
 }
 
 cash_needed_to_win = 10000
 
-state.player.set_room(state.rooms.get_room("outside"))
+state.player.set_room(state.rooms.get_room(state.game_map.start_uid))
 
 cprint(f"\n Welcome {state.player.name}!  This is story so far... ", "yellow", attrs=['reverse'])
 

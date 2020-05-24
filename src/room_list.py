@@ -1,7 +1,6 @@
 from room import Room
 import uuid
 
-
 class RoomList():
   def __init__(self):
     self.rooms = dict()
@@ -20,5 +19,6 @@ class RoomList():
     tunnel_room = Room("Mine Tunnel", "")
     uid = str(uuid.uuid4())
     tunnel_room.uid = uid
+    tunnel_room.is_tunnel = True
     self.add_room(uid, tunnel_room)
     return tunnel_room

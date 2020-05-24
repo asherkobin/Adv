@@ -11,9 +11,11 @@ NO: tab complete (can it be done?)
  - custom "blocked" message
  - create generic room
 
+* Adjacent rooms in the matrix may not connect
 
  look north
  look south etc
+ look up/down?
 
 # Pump Station
 # Natural Cave
@@ -25,3 +27,11 @@ NO: tab complete (can it be done?)
 # wood slats on floor or ceiling
 # cart
 # train tracks
+
+> INSPECT add just descriptive text for words
+* update help
+* figure out spaces/dash in item names
+* bold 23-C text
+
+Action: use steel-key on gravel
+This room does not have a gravel.
