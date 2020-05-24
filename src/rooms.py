@@ -64,37 +64,39 @@ def init_rooms(state):
       [state.items.get_item("dark-pool")]
     ))
 
-class RoomLinker:
-  def __init__(self, state):
-    self.state = state
-  def to_north(self, src, dst):
-    self.state.rooms.get_room(src).north_room = self.state.rooms.get_room(dst)
-  def to_south(self, src, dst):
-    self.state.rooms.get_room(src).south_room = self.state.rooms.get_room(dst)
-  def to_east(self, src, dst):
-    self.state.rooms.get_room(src).east_room = self.state.rooms.get_room(dst)
-  def to_west(self, src, dst):
-    self.state.rooms.get_room(src).west_room = self.state.rooms.get_room(dst)
-
 def init_room_connections(state):
-  # rl = RoomLinker(state)
-  # rl.to_north("outside", None)
-  state.rooms.get_room("outside").north_room = None # state.rooms.get_room("mine-entrance")
-  state.rooms.get_room("mine-entrance").south_room = state.rooms.get_room("outside")
-  state.rooms.get_room("mine-entrance").west_room = state.rooms.get_room("cool-room")
-  state.rooms.get_room("mine-entrance").east_room = state.rooms.get_room("east-passageway")
-  state.rooms.get_room("cool-room").east_room = state.rooms.get_room("mine-entrance")
-  state.rooms.get_room("cool-room").west_room = state.rooms.get_room("narrow-corridor")
-  state.rooms.get_room("narrow-corridor").east_room = state.rooms.get_room("cool-room")
-  state.rooms.get_room("narrow-corridor").west_room = state.rooms.get_room("barrel-shaped-room")
-  state.rooms.get_room("barrel-shaped-room").east_room = state.rooms.get_room("narrow-corridor")
-  state.rooms.get_room("east-passageway").west_room = state.rooms.get_room("mine-entrance")
-  state.rooms.get_room("east-passageway").east_room = state.rooms.get_room("equipment-room")
-  state.rooms.get_room("equipment-room").west_room = state.rooms.get_room("east-passageway")
+  num_map_rows = 3
+  num_map_columns = 6
+  game_map = [
+    [None,                    None,                   None,                   state.rooms.tunnel().uid,    None,                   None                   ],
+    ["barrel-shaped-room",    "narrow-corridor",      "cool-room",            "mine-entrance",             "east-passageway",      "equipment-room"       ],
+    [None,                    None,                   None,                   "outside",                   None,                   None                   ]
+  ]
 
-  state.rooms.get_room("mine-entrance").north_room = state.rooms.create_mine_tunnel()
-  state.rooms.get_room("mine-entrance").north_room.north_room = state.rooms.create_mine_tunnel()
-  state.rooms.get_room("mine-entrance").north_room.south_room = state.rooms.get_room("mine-entrance")
-  state.rooms.get_room("mine-entrance").north_room.east_room = state.rooms.create_mine_tunnel()
-  state.rooms.get_room("mine-entrance").north_room.west_room = state.rooms.create_mine_tunnel()
-  
+  if len(game_map) != num_map_rows:
+    raise Exception("Invalid Map")
+  for row in game_map:
+    if len(row) != num_map_columns:
+      raise Exception("Invalid Map")
+
+  for rowIdx in range(num_map_rows):
+    for colIdx in range(num_map_columns):
+      room = None
+      room_name = game_map[rowIdx][colIdx]
+      if room_name == "outside":
+        print("Debug")
+      if room_name is not None:
+        room = state.rooms.get_room(room_name)
+        if room is None:
+          raise Exception("Room Not Found: " + room_name)
+      if room is not None:
+        room.map_row = rowIdx
+        room.map_col = colIdx
+        if rowIdx > 0:
+          room.north_room = state.rooms.get_room(game_map[rowIdx - 1][colIdx])
+        if rowIdx < num_map_rows - 1:
+          room.south_room = state.rooms.get_room(game_map[rowIdx + 1][colIdx])
+        if colIdx < num_map_columns - 1:
+          room.east_room = state.rooms.get_room(game_map[rowIdx][colIdx + 1])
+        if colIdx > 0:
+          room.west_room = state.rooms.get_room(game_map[rowIdx][colIdx - 1])

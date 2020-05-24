@@ -8,6 +8,9 @@ class Room():
     self.south_room = None
     self.east_room = None
     self.west_room = None
+    self.map_row = -1
+    self.map_col = -1
+    self.uid = None
 
   def can_go_north(self):
     return self.north_room is not None
