@@ -8,14 +8,22 @@ features:
 DONE: unlock flag
 NO: print room
 NO: tab complete (can it be done?)
- - custom "blocked" message
- - create generic room
+DONE: create generic room
+
+* custom "blocked" message
 
 * Adjacent rooms in the matrix may not connect
 
  look north
  look south etc
  look up/down?
+
+ puzzles?
+
+ NPCs
+ Talking
+ Combat
+ HP
 
 # Pump Station
 # Natural Cave
@@ -28,6 +36,8 @@ NO: tab complete (can it be done?)
 # cart
 # train tracks
 
+CHEST!
+
 > INSPECT add just descriptive text for words
 * update help
 * figure out spaces/dash in item names
@@ -35,3 +45,10 @@ NO: tab complete (can it be done?)
 
 Action: use steel-key on gravel
 This room does not have a gravel.
+
+VERB: explore
+Keep track of time somehow.
+
+Leaving the mine, how much $$
+
+DEBUG gives you all items and unlocks door

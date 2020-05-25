@@ -4,6 +4,7 @@ class Player():
     self.room = None
     self.items = []
     self.cash = 0
+    self.num_gold_ounces = 0
 
   def set_name(self, name):
     self.name = name

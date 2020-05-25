@@ -22,7 +22,7 @@ class Actions():
   Room Commands:
   - look (describe your current location)
   - search (search your nearby location for objects of interest)
-  - inspect [area_of_interest] (look further at something nearby)
+  - inspect [object_of_interest] (look closely at something nearby)
 
   Item Commands:
   - take [item_name] (take an item that you have found)
@@ -46,7 +46,7 @@ class Actions():
       if len(room_dirs) == 0:
         cprint("\nYou have no where to go!", "red")
       elif len(room_dirs) == 1:
-        cprint(f"\nYou are at a dead end of the mine tunnel. You can move {room_dirs[0]}.", "white")
+        cprint(f"\nYou have reached the dead end of a tunnel. You can move {room_dirs[0]}.", "white")
       elif len(room_dirs) == 2:
         cprint(f"\nYou are in a mine tunnel. You can move {room_dirs[0]} or {room_dirs[1]}.", "white")
       else:
@@ -139,6 +139,8 @@ class Actions():
         cprint(line, "magenta")
     elif self.state.player.room.has_inventory_item(item_name):
       cprint("\nYou must take the " + colored(item_name, "yellow") + " to examine it.")
+    elif item_name in self.state.player.room.keywords.keys():
+      cprint("\n" + self.state.player.room.keywords[item_name], "magenta")
     else:
       cprint("\nAnything of that description is unremarkable.", "white")
 
@@ -168,8 +170,17 @@ class Actions():
 
 ############# LOOK #############
   
-  def look(self):
-    self.print_room_description(self.state.player.room)
+  def look(self, target = None):
+    if target is None:
+      self.print_room_description(self.state.player.room)
+    elif target == "up":
+      cprint("\nYou see rough brown stone veined with white quartz.", "white")
+    elif target == "down":
+      cprint("\nYou see hard-packed earth, well traveled.", "white")
+    elif target in ["north", "south", "east", "west"]:
+      cprint("\nYou see darkness", "white")
+    else:
+      cprint("\nlook where?", "white")
 
 ############# TAKE #############
 
@@ -216,25 +227,28 @@ class Actions():
 
   def show_inventory(self):
     cprint("\nIn your loot bag you have:\n")
-    cprint("- " + colored("$" + str(self.state.player.get_cash_amount()), "yellow"))
+    cprint("- " + colored(f"${self.state.player.get_cash_amount()}", "yellow"))
+    if self.state.player.num_gold_ounces > 0:
+      cprint("- " + colored(f"{self.state.player.num_gold_ounces} ounces of gold", "yellow"))
     for item in self.state.player.items:
       cprint("- " + colored(item.name, "yellow"))
   
 ############# USE #############
 
-  def use(self, inventory_item, function, room_item):
+  def use(self, inventory_item, function = None, room_item = None):
     found_item = None
     found_target = None
-    
+
     found_item = self.state.player.get_item(inventory_item)
     if not found_item:
       cprint("\nYou do not possess a " + colored(inventory_item, "yellow") + ".")
       return
 
-    found_target = self.state.player.room.get_room_item(room_item)
-    if not found_target:
-      cprint("\nThis room does not have a " + colored(room_item, "cyan") + ".")
-      return
+    if room_item is not None:
+      found_target = self.state.player.room.get_room_item(room_item)
+      if not found_target:
+        cprint("\nThis room does not have a " + colored(room_item, "cyan") + ".")
+        return
 
     if not found_item.use(found_target, self.state):
       cprint("\nNo effect...", "magenta")

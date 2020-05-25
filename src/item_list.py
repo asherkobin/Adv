@@ -70,16 +70,19 @@ class EntranceChest(RoomItem):
   def __init__(self):
     super().__init__("chest", "The chest is banded in bronze has a keyhole on the front.")
 
-class MysticStone(InventoryItem):
+class MysticStone(InventoryItem): # Lets your pawn off any gold or items for cash
   def __init__(self):
-    super().__init__("peculiar-stone", "Mysterious rune carvings surround the stone.", True)
+    super().__init__("stone", "Mysterious rune carvings surround the stone.", True)
   def take(self, state):
     super().take(state)
-    state.items.get_item("dark--pool").description = "Beyond the dark surface, you see several rocks settled on the floor of the pool."
+    state.items.get_item("dark-pool").description = "Beyond the dark surface, you see several rocks settled on the floor of the pool."
+  def use(self, target, state):
+    cprint("\nA portal is opened to...a shop named 'Pawn to Rook 8' with a sign that says 'Where we treat you like a Queen!'", "cyan")
+    return True
 
 class DarkPool(RoomItem):
   def __init__(self):
-    super().__init__("pool", "Beyond the dark surface, you see several rocks settled on the floor of the pool.  You scatter the rocks and see a peculiar-stone, distinct from the others.")
+    super().__init__("pool", "Beyond the dark surface, you see several rocks settled on the floor of the pool.  You scatter the rocks and see a peculiar looking stone, distinct from the others.")
 
 class RockPick(InventoryItem):
   def __init__(self):
@@ -88,6 +91,14 @@ class RockPick(InventoryItem):
 class Shovel(InventoryItem):
   def __init__(self):
     super().__init__("shovel", "A tool used for digging.")
+  def use(self, target, state):
+    if state.player.room.num_gold_ounces > 0:
+      cprint(f"\nYou hit paydirt and find {state.player.room.num_gold_ounces} ounces of gold! You put the gold in your loot sack.", "yellow")
+      state.player.num_gold_ounces += state.player.room.num_gold_ounces
+      state.player.room.num_gold_ounces = 0
+    else:
+      cprint("\nThere is nothing to be found here.", "white")
+    return True
 
 class EquipmentLocker(RoomItem):
   def __init__(self):

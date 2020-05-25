@@ -23,10 +23,11 @@ class GameMap():
     return uid_list
 
 def init_map(state):
-  num_map_rows = 3
+  num_map_rows = 4
   num_map_columns = 6
   room_matrix = [
     [None,                    None,                   None,                   state.rooms.tunnel().uid,    state.rooms.tunnel().uid,  None                   ],
+    [None,                    None,                   None,                   state.rooms.tunnel().uid,    None,                      None                   ],
     ["barrel-shaped-room",    "narrow-corridor",      "cool-room",            "mine-entrance",             "east-passageway",         "equipment-room"       ],
     [None,                    None,                   None,                   "outside",                   None,                      None                   ]
   ]

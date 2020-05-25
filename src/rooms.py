@@ -5,9 +5,12 @@ def init_rooms(state):
     "outside",
     Room(
       "Outside Mine Entrance",
-      "North of you, the mine entrance is blocked by a grid of thick steel. The grid is locked by a padlock that looks rather new.",
+      "North of you, the mine entrance is blocked by a grid of thick steel bars. The grid is locked by a padlock that looks rather new.",
       [state.items.get_item("brick"), state.items.get_item("steel-key"), state.items.get_item("gravel")],
-      [state.items.get_item("padlock")]
+      [state.items.get_item("padlock")],
+      {
+        "grid": "You could sell the grid for scrap but it probably weighs 1000 pounds."
+      }
     ))
 
   state.rooms.add_room(
@@ -60,6 +63,6 @@ def init_rooms(state):
     Room(
       "Barrel-Shaped Room",
       "The corridor ends into a cold empty area. The ceiling is covered in moisture, the walls converging into a circle. You have found the source of the dripping sound: a small pool being filled from codensation.",
-      [state.items.get_item("peculiar-stone")],
+      [state.items.get_item("stone")],
       [state.items.get_item("dark-pool")]
     ))

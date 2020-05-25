@@ -1,9 +1,10 @@
 class Room():
-  def __init__(self, name, description, inventory_items = [], room_items = []):
+  def __init__(self, name, description, inventory_items = [], room_items = [], keywords = {}):
     self.name = name
     self.description = description
     self.inventory_items = inventory_items
     self.room_items = room_items
+    self.keywords = keywords
     self.north_room = None
     self.south_room = None
     self.east_room = None
@@ -12,6 +13,7 @@ class Room():
     self.map_col = -1
     self.uid = None
     self.is_tunnel = False
+    self.num_gold_ounces = 0
 
   def can_go_north(self):
     return self.north_room is not None
