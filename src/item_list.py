@@ -77,7 +77,8 @@ class MysticStone(InventoryItem): # Lets your pawn off any gold or items for cas
     super().take(state)
     state.items.get_item("dark-pool").description = "Beyond the dark surface, you see several rocks settled on the floor of the pool."
   def use(self, target, state):
-    cprint("\nA portal is opened to...a shop named 'Pawn to Rook 8' with a sign that says 'Where we treat you like a Queen!'", "cyan")
+    cprint("\nYou are instantly transported to somewhere outside the mine.", "magenta")
+    state.pawn_shop.enter(state)
     return True
 
 class DarkPool(RoomItem):
@@ -93,7 +94,7 @@ class Shovel(InventoryItem):
     super().__init__("shovel", "A tool used for digging.")
   def use(self, target, state):
     if state.player.room.num_gold_ounces > 0:
-      cprint(f"\nYou hit paydirt and find {state.player.room.num_gold_ounces} ounces of gold! You put the gold in your loot sack.", "yellow")
+      print(colored("\nYou hit paydirt and find ", "white") + colored(str(state.player.room.num_gold_ounces) +  " ounces of gold!", "yellow") + colored(" You put the gold in your loot sack.", "white"))
       state.player.num_gold_ounces += state.player.room.num_gold_ounces
       state.player.room.num_gold_ounces = 0
     else:

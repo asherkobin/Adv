@@ -15,7 +15,7 @@ class Actions():
   def __init__(self, state):
     self.state = state
 
-  def list_commands(self):
+  def help(self):
     cprint("""
   Movement Commands: n (north), s (south), e (east), w (west)
 
@@ -107,7 +107,6 @@ class Actions():
     + colored("inspect", "green", attrs=["bold", "underline"])\
     + " items\nin your inventory.  You may learn more about an item and discover possible clues."\
     + "\nIf you feel stuck, use the " + colored("look", "green", attrs=["bold", "underline"]) + " command as the description may provide help."
-    
     print()
     print(hint)
 
@@ -229,7 +228,7 @@ class Actions():
     cprint("\nIn your loot bag you have:\n")
     cprint("- " + colored(f"${self.state.player.get_cash_amount()}", "yellow"))
     if self.state.player.num_gold_ounces > 0:
-      cprint("- " + colored(f"{self.state.player.num_gold_ounces} ounces of gold", "yellow"))
+      cprint("- " + colored(f"gold ({self.state.player.num_gold_ounces} ounces)", "yellow"))
     for item in self.state.player.items:
       cprint("- " + colored(item.name, "yellow"))
   

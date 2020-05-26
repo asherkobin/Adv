@@ -46,9 +46,24 @@ CHEST!
 Action: use steel-key on gravel
 This room does not have a gravel.
 
+goto debug command
+
 VERB: explore
 Keep track of time somehow.
 
 Leaving the mine, how much $$
 
 DEBUG gives you all items and unlocks door
+invisible wall
+
+stone store
+leave
+win
+multi word objects
+
+OOPS: use shovel on padlock
+      use stone on padlock
+
+When you pickup the stone, display some flavor text.  Don't make using the stone so direct
+"drop gold"
+"drop cash"

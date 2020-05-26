@@ -42,7 +42,8 @@ def start_adventure():
     "s": actions.south,
     "e": actions.east,
     "w": actions.west,
-    "?": actions.list_commands,
+    "?": actions.help,
+    "help": actions.help,
     "look": actions.look,
     "take": actions.take,
     "drop": actions.drop,
@@ -102,10 +103,11 @@ def start_adventure():
     if (action == "q"):
       break
 
+    #### NEEDS MAJOR REFACTORING ####
     try:
       fn_sig = signature(options[action])
-      if (subject is None):
-        if len(fn_sig.parameters) > 0:
+      if subject is None:
+        if len(fn_sig.parameters) > 0 and "target" not in fn_sig.parameters.keys():
           cprint("\n" + action + " what?", "red")
         else:
           options[action]()
