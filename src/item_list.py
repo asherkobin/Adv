@@ -77,7 +77,7 @@ class MysticStone(InventoryItem): # Lets your pawn off any gold or items for cas
     super().take(state)
     state.items.get_item("dark-pool").description = "Beyond the dark surface, you see several rocks settled on the floor of the pool."
   def use(self, target, state):
-    cprint("\nYou are instantly transported to somewhere outside the mine.", "magenta")
+    cprint("\nYou are instantly transported to somewhere outside the mine...", "magenta")
     state.pawn_shop.enter(state)
     return True
 

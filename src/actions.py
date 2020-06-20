@@ -26,12 +26,13 @@ class Actions():
 
   Item Commands:
   - take [item_name] (take an item that you have found)
-  - open [item_name] (opens an object)
+  - open [item_name] (opens an object, if possible)
 
   Inventory Commands:
   - loot (displays your inventory)
   - inspect [item_name] (inspect an item for a closer look)
   - use [item_name] on [target] (use an item from your inventory on an object)
+  - use [item_name] (uses an object is self-operable)
   - drop [item_name] (drop an item from your inventory)
   
   Other Commands:
@@ -103,9 +104,9 @@ class Actions():
     hint = colored("HINT: ", "white")\
     + "You can "\
     + colored("inspect", "green", attrs=["bold", "underline"])\
-    + " sepcific areas of interest.  Also, you can "\
+    + " sepcific areas of interest. Also, you can "\
     + colored("inspect", "green", attrs=["bold", "underline"])\
-    + " items\nin your inventory.  You may learn more about an item and discover possible clues."\
+    + " items\nin your inventory. You may learn more about an item and discover possible clues."\
     + "\nIf you feel stuck, use the " + colored("look", "green", attrs=["bold", "underline"]) + " command as the description may provide help."
     print()
     print(hint)
@@ -201,6 +202,7 @@ class Actions():
     elif found_inventory_item is not None:
       cprint("\nYou added the " + colored(item_name, "yellow") + " to your loot bag.")
       found_inventory_item.take(self.state)
+      self.inspect(item_name)
       if found_inventory_item.hidden:
         found_inventory_item.hidden = False
       else:

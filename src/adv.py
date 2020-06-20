@@ -46,6 +46,8 @@ def start_adventure():
     "help": actions.help,
     "look": actions.look,
     "take": actions.take,
+    "pickup": actions.take,
+    "get": actions.take,
     "drop": actions.drop,
     "loot": actions.show_inventory,
     "inspect": actions.inspect,
@@ -66,14 +68,14 @@ def start_adventure():
   print()
 
   intro = """You have accumulated a gambling debt of $10,000 playing poker.
-  Your unscrupulous backer is looking for you to collect his money.
-  You must find the money needed within 24 hours.
-  Your best option to explore an abandoned mine, hoping to find anything of value to pay your debt."""
+Your unscrupulous backer is looking for you to collect his money.
+You must find the money needed within 24 hours.
+Your best option to explore an abandoned mine, hoping to find anything of value to pay your debt."""
 
   for line in textwrap.wrap(intro, 80):
     cprint(line, "cyan")
 
-  options["hint"]()
+  # options["hint"]()
 
   cprint("\nType '?' to list player commands", "green")
 
