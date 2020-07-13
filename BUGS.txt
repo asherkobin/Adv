@@ -1,0 +1,69 @@
+https://classroomaid.files.wordpress.com/2013/01/if-for-beginners-by-plotkin-and-albaugh-2010.png
+
+bugs:
+X alter inspect text after something has changed: padlock pool
+X textwrap inspect text
+
+features:
+DONE: unlock flag
+NO: print room
+NO: tab complete (can it be done?)
+DONE: create generic room
+
+* custom "blocked" message
+
+* Adjacent rooms in the matrix may not connect
+
+ look north
+ look south etc
+ look up/down?
+
+ puzzles?
+
+ NPCs
+ Talking
+ Combat
+ HP
+
+# Pump Station
+# Natural Cave
+# Ventilation Shaft
+# Water Basin
+# Tailings
+# Drainage Tunnel
+# use Pan in pool
+# wood slats on floor or ceiling
+# cart
+# train tracks
+
+CHEST!
+
+> INSPECT add just descriptive text for words
+* update help
+* figure out spaces/dash in item names
+* bold 23-C text
+
+Action: use steel-key on gravel
+This room does not have a gravel.
+
+goto debug command
+
+VERB: explore
+Keep track of time somehow.
+
+Leaving the mine, how much $$
+
+DEBUG gives you all items and unlocks door
+invisible wall
+
+stone store
+leave
+win
+multi word objects
+
+OOPS: use shovel on padlock
+      use stone on padlock
+
+When you pickup the stone, display some flavor text.  Don't make using the stone so direct
+"drop gold"
+"drop cash"

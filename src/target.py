@@ -15,3 +15,6 @@ class Target():
 
   def search(self):
     cprint("\nYou Find Gold! [PLACEHOLDER]", "magenta")
+
+  def use(self, inventory_item):
+    pass
